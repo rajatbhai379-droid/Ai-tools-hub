@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rajat's AI Tools - 5 Free AI Tools in One Page</title>
+<meta name="description" content="Free AI Tools by Rajat - Text to Speech, Speech to Text, Image to Text, Background Remover, Paraphraser">
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>
+*{box-sizing:border-box}
+body{font-family: 'Segoe UI', Arial; background:#f0f2f8; margin:0; padding:15px; color:#111}
+h1{text-align:center; color:#4f46e5}
+.tool{background:#fff; padding:20px; border-radius:16px; margin:20px auto; max-width:700px; box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+h2{margin:0 0 10px; font-size:20px}
+textarea,input{width:100%; padding:12px; margin:10px 0; border-radius:10px; border:1px solid #ccc; font-size:15px}
+button{background:#4f46e5; color:#fff; border:none; padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:bold; margin-top:5px; margin-right:5px}
+button:hover{background:#3730a3}
+#preview, #bgResult{max-width:100%; margin-top:12px; border-radius:10px; display:none}
+.resultBox{background:#f8fafc; padding:12px; border-radius:10px; margin-top:10px; white-space:pre-wrap; border:1px dashed #ccc}
+</style>
+</head>
+<body>
+
+<h1>🤖 Rajat's AI Tools Hub</h1>
+<p style="text-align:center">5 Powerful AI Tools - 100% Free & No API Needed</p>
+
+<!-- 1. TEXT TO SPEECH -->
+<div class="tool">
+<h2>1. 🔊 AI Text to Speech</h2>
+<textarea id="ttsText" rows="4" placeholder="Yaha English ya Hindi me kuch bhi likho..."></textarea>
+<button onclick="speakText()">Speak</button>
+<button onclick="stopSpeak()" style="background:#ef4444">Stop</button>
+</div>
+
+<!-- 2. SPEECH TO TEXT -->
+<div class="tool">
+<h2>2. 🎤 AI Speech to Text</h2>
+<p>Mic se bolo, text ban jayega</p>
+<button onclick="startVoice()">Start Listening</button>
+<textarea id="voiceResult" rows="4" placeholder="Tum jo bologe yaha ayega..."></textarea>
+</div>
+
+<!-- 3. IMAGE TO TEXT OCR -->
+<div class="tool">
+<h2>3. 📝 AI Image to Text (OCR)</h2>
+<p>Kisi bhi image ka text nikal lo</p>
+<input type="file" id="ocrImage" accept="image/*">
+<button onclick="doOCR()">Extract Text</button>
+<div id="ocrResult" class="resultBox">Result yaha ayega...</div>
+</div>
+
+<!-- 4. BACKGROUND REMOVER -->
+<div class="tool">
+<h2>4. ✂️ AI Background Remover</h2>
+<p>100% Browser me background remove hoga</p>
+<input type="file" id="bgImage" accept="image/*">
+<button onclick="removeBgNow()">Remove Background</button>
+<p id="bgStatus"></p>
+<img id="bgResult" />
+<a id="downloadBtn" style="display:none"><button style="background:#10b981">Download PNG</button></a>
+</div>
+
+<!-- 5. PARAPHRASER -->
+<div class="tool">
+<h2>5. ✨ AI Paraphraser & Rewriter</h2>
+<textarea id="paraInput" rows="4" placeholder="Yaha apna sentence likho..."></textarea>
+<button onclick="paraphrase()">Paraphrase Now</button>
+<textarea id="paraOutput" rows="4" placeholder="Rewritten text yaha ayega..."></textarea>
+</div>
+
+<script type="module">
+import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/index.mjs";
+window.removeBackgroundLib = removeBackground;
+</script>
+
+<script>
+// 1. TTS
+function speakText(){
+  const text = document.getElementById('ttsText').value;
+  if(!text) return alert('Pehle kuch likho');
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'hi-IN';
+  utter.rate = 0.9;
+  speechSynthesis.speak(utter);
+}
+function stopSpeak(){ speechSynthesis.cancel(); }
+
+// 2. Speech to Text
+function startVoice(){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRecognition) return alert('Ye feature Chrome me kaam karega');
+  const rec = new SpeechRecognition();
+  rec.lang = 'en-IN';
+  rec.onstart = ()=> document.getElementById('voiceResult').placeholder = "Sun raha hu... bolo";
+  rec.onresult = (e)=>{
+    document.getElementById('voiceResult').value = e.results[0][0].transcript;
+  };
+  rec.start();
+}
+
+// 3. OCR
+async function doOCR(){
+  const file = document.getElementById('ocrImage').files[0];
+  if(!file) return alert('Pehle image select karo');
+  const box = document.getElementById('ocrResult');
+  box.innerText = "⏳ Scanning... 5-10 sec lagega, wait karo...";
+  const {data:{text}} = await Tesseract.recognize(file, 'eng+hin');
+  box.innerText = text || "Koi text nahi mila";
+}
+
+// 4. BG REMOVER - FULL WORKING
+async function removeBgNow(){
+  const file = document.getElementById('bgImage').files[0];
+  if(!file) return alert('Pehle image select karo');
+  document.getElementById('bgStatus').innerText = "⏳ AI background hata raha hai... 10-15 sec lagega (pehli baar)";
+  try{
+    const blob = await window.removeBackgroundLib(file);
+    const url = URL.createObjectURL(blob);
+    const img = document.getElementById('bgResult');
+    img.src = url;
+    img.style.display = "block";
+    document.getElementById('bgStatus').innerText = "✅ Ho gaya!";
+    const dl = document.getElementById('downloadBtn');
+    dl.href = url;
+    dl.download = "no-bg-rajat.png";
+    dl.style.display = "inline-block";
+  }catch(e){
+    document.getElementById('bgStatus').innerText = "Error: " + e.message;
+  }
+}
+
+// 5. PARAPHRASER
+function paraphrase(){
+  let input = document.getElementById('paraInput').value;
+  if(!input) return alert('Pehle kuch likho');
+  let map = {
+    "very":"extremely","good":"excellent","bad":"terrible","happy":"joyful","sad":"upset",
+    "big":"massive","small":"tiny","important":"crucial","help":"assist","need":"require",
+    "because":"since","but":"however","so":"therefore","use":"utilize","get":"obtain"
+  };
+  let output = input;
+  for(let k in map){
+    output = output.replace(new RegExp(k, "gi"), map[k]);
+  }
+  document.getElementById('paraOutput').value = output;
+}
+</script>
+
+</body>
+</html>
