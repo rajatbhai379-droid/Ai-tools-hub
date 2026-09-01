@@ -1,72 +1,78 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rajat AI - Free AI Assistant for Students</title>
+<title>Rajat AI - Your Personal AI Assistant</title>
 <script src="https://js.puter.com/v2/"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}body{font-family:'Segoe UI',Arial;margin:0;background:#f8fafc;color:#1e293b}
-header{background:#ffffff;padding:15px 20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.05);position:sticky;top:0;z-index:10}
-header h2{margin:0;color:#0f172a;letter-spacing:0.5px}
-.container{max-width:900px;margin:auto;padding:20px}
-.card{background:#fff;padding:22px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:22px;border:1px solid #e2e8f0}
-.card h3{margin-top:0;color:#0f172a}
-input,textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #cbd5e1;border-radius:10px;font-size:15px}
-input:focus,textarea:focus{outline:none;border-color:#0f172a}
-.btn{background:#0f172a;color:#fff;padding:12px;border:none;border-radius:10px;cursor:pointer;width:100%;font-weight:600;font-size:15px}
-.btn:hover{background:#1e293b}
-.result{background:#f8fafc;padding:14px;border-radius:10px;margin-top:12px;white-space:pre-wrap;line-height:1.7;font-size:14px;border:1px solid #e2e8f0;min-height:40px}
-#chatBox{height:320px;overflow-y:auto;border:1px solid #e2e8f0;padding:12px;border-radius:10px;background:#fff}
-#chatBox p{margin:10px 0;line-height:1.6;word-wrap:break-word;font-size:14px}
-footer{text-align:center;padding:22px;background:#0f172a;color:#cbd5e1;margin-top:30px;font-size:14px}
-footer a{color:#fff;margin:0 10px;text-decoration:none}
+*{box-sizing:border-box}body{font-family:'Outfit',sans-serif;margin:0;background:#0a0a0f;color:#e2e8f0}
+header{background:rgba(15,23,42,0.8);backdrop-filter:blur(10px);padding:18px;text-align:center;position:sticky;top:0;border-bottom:1px solid #1e293b}
+header h2{margin:0;font-size:26px;background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+header p{margin:4px 0 0;color:#94a3b8;font-size:13px;letter-spacing:1px}
+.container{max-width:950px;margin:auto;padding:24px}
+.hero{text-align:center;padding:30px 20px}
+.hero h1{font-size:34px;margin:0;background:linear-gradient(90deg,#fff,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#94a3b8;margin-top:10px}
+.card{background:linear-gradient(145deg,#111827,#1e293b);padding:22px;border-radius:18px;border:1px solid #334155;margin-bottom:22px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.card h3{margin-top:0;color:#f8fafc}
+input,textarea{width:100%;padding:14px;margin:10px 0;background:#0f172a;border:1px solid #334155;border-radius:12px;color:#fff;font-size:14px}
+input::placeholder,textarea::placeholder{color:#64748b}
+.btn{background:linear-gradient(90deg,#3b82f6,#8b5cf6);color:#fff;padding:13px;border:none;border-radius:12px;cursor:pointer;width:100%;font-weight:700;letter-spacing:0.5px;transition:0.2s}
+.btn:hover{transform:scale(1.02);opacity:0.9}
+.result{background:#0f172a;padding:14px;border-radius:12px;margin-top:12px;white-space:pre-wrap;line-height:1.7;font-size:14px;border:1px solid #1e293b;min-height:40px;color:#cbd5e1}
+#chatBox{height:340px;overflow-y:auto;border:1px solid #1e293b;padding:14px;border-radius:12px;background:#0f172a}
+#chatBox p{margin:12px 0;line-height:1.6;font-size:14px}
+#chatBox b{color:#60a5fa}
+footer{text-align:center;padding:24px;background:#020617;color:#64748b;margin-top:30px;border-top:1px solid #1e293b}
+footer a{color:#94a3b8;margin:0 10px;text-decoration:none}footer a:hover{color:#fff}
+img.gen{width:100%;border-radius:14px;margin-top:12px;border:1px solid #334155}
 </style>
 </head>
 <body>
-<header><h2>Rajat AI</h2><p style="margin:5px 0 0;font-size:13px;color:#64748b">Free AI Tools for Students</p></header>
+<header><h2>RAJAT AI</h2><p>PREMIUM • FAST • FREE FOREVER</p></header>
+<div class="hero"><h1>Your Personal AI Super Assistant</h1><p>Trusted by 10,000+ Students • Essay, Chat & Image in 1 sec</p></div>
 
 <div class="container">
-<div class="card"><h3>📝 Essay Generator</h3><input id="essayTopic" placeholder="Topic likho - jaise Diwali, My Aim"><button class="btn" onclick="makeEssay()">Generate Essay</button><div id="essayOut" class="result">Yaha essay ayega...</div></div>
+<div class="card"><h3>✨ Essay Generator Pro</h3><input id="essayTopic" placeholder="Topic likho - ex: Artificial Intelligence"><button class="btn" onclick="makeEssay()">✨ Generate Magic Essay</button><div id="essayOut" class="result">Your essay will appear here...</div></div>
 
-<div class="card"><h3>💬 Ask Anything</h3><div id="chatBox"><p><b>Rajat AI:</b> Namaste! Apna koi bhi sawal puchiye.</p></div><div style="display:flex;gap:10px;margin-top:12px"><input id="chatInput" placeholder="Yaha apna sawal likho..."><button class="btn" style="width:100px" onclick="sendChat()">Send</button></div></div>
+<div class="card"><h3>💬 Rajat AI Chat - Ask Anything</h3><div id="chatBox"><p><b>Rajat AI:</b> Hey! I'm your premium assistant. Puchho jo bhi puchna hai 🔥</p></div><div style="display:flex;gap:10px;margin-top:12px"><input id="chatInput" placeholder="Type your question..."><button class="btn" style="width:110px" onclick="sendChat()">Send 🚀</button></div></div>
 
-<div class="card"><h3>🎨 Text to Image</h3><input id="imgPrompt" placeholder="Example: A cute cat studying on table"><button class="btn" onclick="makeImg()">Generate Image</button><div id="imgOut" class="result">Yaha image ayegi...</div></div>
+<div class="card"><h3>🎨 AI Image Studio - Celebrity Edition</h3><input id="imgPrompt" placeholder="Describe - ex: A billionaire boy in Lamborghini, cinematic"><button class="btn" onclick="makeImg()">🎨 Generate HD Image</button><div id="imgOut" class="result">Your HD image will appear here...</div></div>
 </div>
 
-<footer><p>© 2026 Rajat AI. All Rights Reserved.</p><p><a href="about.html">About Us</a> | <a href="privacy.html">Privacy Policy</a> | <a href="contact.html">Contact Us</a> | <a href="terms.html">Terms</a></p></footer>
+<footer><p>© 2026 Rajat AI • Built with ❤️ for Students</p><p><a href="about.html">About</a> | <a href="privacy.html">Privacy</a> | <a href="contact.html">Contact</a> | <a href="terms.html">Terms</a></p></footer>
 
 <script>
-function cleanText(text){
- return text.replace(/\*\*/g, '').replace(/\*/g, '').replace(/##/g, '').replace(/###/g, '');
-}
+function clean(t){return t.replace(/\*\*/g,'').replace(/\*/g,'').replace(/##/g,'').replace(/###/g,'');}
+
 async function makeEssay(){
- let t=document.getElementById('essayTopic').value;
- if(!t)return alert('Topic likho');
- document.getElementById('essayOut').innerText='Likh raha hu...';
- let res = await puter.ai.chat(`Write a 400 word essay in easy Hindi on: ${t}. No stars, no bold formatting, simple plain text only.`);
- document.getElementById('essayOut').innerText=cleanText(res.message.content);
+ let t=document.getElementById('essayTopic').value; if(!t)return alert('Topic likho');
+ document.getElementById('essayOut').innerText='✨ Crafting your essay...';
+ let r=await puter.ai.chat(`Write a premium 400 word essay in Hindi + English mix on: ${t}. Plain text only, no markdown, professional tone.`);
+ document.getElementById('essayOut').innerText=clean(r.message.content);
 }
+
 async function sendChat(){
- let inp=document.getElementById('chatInput');
- let box=document.getElementById('chatBox');
- if(!inp.value)return;
- let q=inp.value;
- box.innerHTML+=`<p><b>You:</b> ${q}</p>`;
- inp.value=''; 
- let typingId = 'typ-'+Date.now();
- box.innerHTML+=`<p id="${typingId}"><b>Rajat AI:</b> Soch raha hu...</p>`; 
- box.scrollTop=box.scrollHeight;
- let res = await puter.ai.chat(q + " - Answer in simple Hindi/English mix, plain text, no markdown stars.");
- document.getElementById(typingId).remove();
- box.innerHTML+=`<p><b>Rajat AI:</b> ${cleanText(res.message.content)}</p>`;
- box.scrollTop=box.scrollHeight;
+ let inp=document.getElementById('chatInput'); let box=document.getElementById('chatBox'); if(!inp.value)return;
+ let q=inp.value; box.innerHTML+=`<p><b>You:</b> ${q}</p>`; inp.value='';
+ let id='t'+Date.now(); box.innerHTML+=`<p id="${id}"><b>Rajat AI:</b> Thinking...</p>`; box.scrollTop=box.scrollHeight;
+ let r=await puter.ai.chat(q); document.getElementById(id).remove();
+ box.innerHTML+=`<p><b>Rajat AI:</b> ${clean(r.message.content)}</p>`; box.scrollTop=box.scrollHeight;
 }
-function makeImg(){
- let p=document.getElementById('imgPrompt').value;
- if(!p)return alert('Prompt likho');
- let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=768&height=768&nologo=true&seed=${Date.now()}`;
- document.getElementById('imgOut').innerHTML=`<img src="${url}" style="width:100%;border-radius:12px">`;
+
+async function makeImg(){
+ let p=document.getElementById('imgPrompt').value; if(!p)return alert('Prompt likho - ex: celebrity style photo');
+ document.getElementById('imgOut').innerHTML='🎨 Creating your HD image... Please wait 5 sec...';
+ try{
+   let img = await puter.ai.txt2img(p, false);
+   document.getElementById('imgOut').innerHTML=`<img class="gen" src="${img.src}">`;
+ }catch(e){
+   // Fallback agar puter fail ho to pollinations
+   let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=1024&height=1024&nologo=true&model=flux&seed=${Date.now()}`;
+   document.getElementById('imgOut').innerHTML=`<img class="gen" src="${url}" onerror="this.parentElement.innerText='Image load fail, dubara try karo'">`;
+ }
 }
 </script>
 </body>
