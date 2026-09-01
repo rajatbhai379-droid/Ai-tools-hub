@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}body{font-family:'Outfit',sans-serif;margin:0;background:#0a0a0f;color:#e2e8f0}
-header{background:rgba(15,23,42,0.8);backdrop-filter:blur(10px);padding:18px;text-align:center;position:sticky;top:0;border-bottom:1px solid #1e293b}
+header{background:rgba(15,23,42,0.8);backdrop-filter:blur(10px);padding:18px;text-align:center;position:sticky;top:0;border-bottom:1px solid #1e293b;z-index:10}
 header h2{margin:0;font-size:26px;background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 header p{margin:4px 0 0;color:#94a3b8;font-size:13px;letter-spacing:1px}
 .container{max-width:950px;margin:auto;padding:24px}
@@ -27,7 +27,9 @@ input::placeholder,textarea::placeholder{color:#64748b}
 #chatBox b{color:#60a5fa}
 footer{text-align:center;padding:24px;background:#020617;color:#64748b;margin-top:30px;border-top:1px solid #1e293b}
 footer a{color:#94a3b8;margin:0 10px;text-decoration:none}footer a:hover{color:#fff}
-img.gen{width:100%;border-radius:14px;margin-top:12px;border:1px solid #334155}
+img.gen{width:100%;border-radius:14px;margin-top:12px;border:1px solid #334155;max-height:600px;object-fit:contain;background:#000}
+.small-btns{display:flex;gap:10px;margin-top:10px}
+.small-btns button{flex:1;padding:10px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#fff;cursor:pointer;font-weight:600}
 </style>
 </head>
 <body>
@@ -39,13 +41,24 @@ img.gen{width:100%;border-radius:14px;margin-top:12px;border:1px solid #334155}
 
 <div class="card"><h3>💬 Rajat AI Chat - Ask Anything</h3><div id="chatBox"><p><b>Rajat AI:</b> Hey! I'm your premium assistant. Puchho jo bhi puchna hai 🔥</p></div><div style="display:flex;gap:10px;margin-top:12px"><input id="chatInput" placeholder="Type your question..."><button class="btn" style="width:110px" onclick="sendChat()">Send 🚀</button></div></div>
 
-<div class="card"><h3>🎨 AI Image Studio - Celebrity Edition</h3><input id="imgPrompt" placeholder="Describe - ex: A billionaire boy in Lamborghini, cinematic"><button class="btn" onclick="makeImg()">🎨 Generate HD Image</button><div id="imgOut" class="result">Your HD image will appear here...</div></div>
+<div class="card"><h3>🎨 AI Image Studio - Celebrity Edition + HD Fix</h3><input id="imgPrompt" placeholder="Describe - ex: A billionaire boy in Lamborghini, cinematic"><button class="btn" onclick="makeImg()">🎨 Generate HD Image</button><div id="imgOut" class="result">Your HD image will appear here... Click Generate</div></div>
 </div>
 
 <footer><p>© 2026 Rajat AI • Built with ❤️ for Students</p><p><a href="about.html">About</a> | <a href="privacy.html">Privacy</a> | <a href="contact.html">Contact</a> | <a href="terms.html">Terms</a></p></footer>
 
 <script>
 function clean(t){return t.replace(/\*\*/g,'').replace(/\*/g,'').replace(/##/g,'').replace(/###/g,'');}
+
+// === IMAGE CORRECTION LOGIC ===
+function correctPrompt(p){
+  // auto correction for better face and HD
+  let base = p.trim();
+  // remove bad words that make image blur
+  let correction = ", ultra HD, 4k, photorealistic, sharp focus, highly detailed, cinematic lighting, DSLR, 85mm lens, clear face, symmetrical eyes";
+  // agar user ne already HD likha hai to dubara add mat karo
+  if(base.toLowerCase().includes("4k") || base.toLowerCase().includes("hd")) return base;
+  return base + correction;
+}
 
 async function makeEssay(){
  let t=document.getElementById('essayTopic').value; if(!t)return alert('Topic likho');
@@ -63,17 +76,45 @@ async function sendChat(){
 }
 
 async function makeImg(){
- let p=document.getElementById('imgPrompt').value; if(!p)return alert('Prompt likho - ex: celebrity style photo');
- document.getElementById('imgOut').innerHTML='🎨 Creating your HD image... Please wait 5 sec...';
+ let raw=document.getElementById('imgPrompt').value; if(!raw)return alert('Prompt likho - ex: celebrity style photo');
+ let p = correctPrompt(raw); // <-- yaha correction lag raha hai
+ let out = document.getElementById('imgOut');
+ out.innerHTML='🎨 Creating your HD image with correction... Please wait 7 sec...<br><small style="color:#64748b">Prompt corrected to: '+p+'</small>';
  try{
+   // Method 1: Puter
    let img = await puter.ai.txt2img(p, false);
-   document.getElementById('imgOut').innerHTML=`<img class="gen" src="${img.src}">`;
+   showImage(img.src);
  }catch(e){
-   // Fallback agar puter fail ho to pollinations
-   let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=1024&height=1024&nologo=true&model=flux&seed=${Date.now()}`;
-   document.getElementById('imgOut').innerHTML=`<img class="gen" src="${url}" onerror="this.parentElement.innerText='Image load fail, dubara try karo'">`;
+   console.log("Puter fail, using Pollinations", e);
+   // Method 2: Pollinations - HD Fixed
+   let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=1024&height=1024&nologo=true&model=flux&enhance=true&seed=${Date.now()}`;
+   showImage(url);
  }
 }
+
+function showImage(src){
+  document.getElementById('imgOut').innerHTML=`
+    <img class="gen" id="genImg" src="${src}" crossorigin="anonymous">
+    <div class="small-btns">
+      <button onclick="downloadImg()">⬇️ Download HD</button>
+      <button onclick="makeImg()">🔄 Regenerate</button>
+    </div>
+    <p style="font-size:11px;color:#64748b;margin-top:8px">If face is blurry, add words like 'clear face, closeup shot' in prompt</p>
+  `;
+}
+
+function downloadImg(){
+  let img = document.getElementById('genImg');
+  if(!img) return;
+  let a = document.createElement('a');
+  a.href = img.src;
+  a.download = 'RajatAI-HD-'+Date.now()+'.jpg';
+  a.target = '_blank';
+  a.click();
+}
+
+// Enter se chat send
+document.getElementById('chatInput').addEventListener('keypress', function(e){ if(e.key==='Enter') sendChat(); });
 </script>
 </body>
 </html>
