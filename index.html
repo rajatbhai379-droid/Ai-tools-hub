@@ -10,22 +10,27 @@
 *{box-sizing:border-box}body{font-family:'Outfit',sans-serif;margin:0;background:#0a0a0f;color:#e2e8f0}
 header{background:rgba(15,23,42,0.8);backdrop-filter:blur(10px);padding:18px;text-align:center;position:sticky;top:0;border-bottom:1px solid #1e293b;z-index:10}
 header h2{margin:0;font-size:26px;background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+header p{margin:4px 0 0;color:#94a3b8;font-size:13px;letter-spacing:1px}
 .container{max-width:950px;margin:auto;padding:24px}
 .hero{text-align:center;padding:30px 20px}
 .hero h1{font-size:34px;margin:0;background:linear-gradient(90deg,#fff,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{color:#94a3b8;margin-top:10px}
-.card{background:linear-gradient(145deg,#111827,#1e293b);padding:22px;border-radius:18px;border:1px solid #334155;margin-bottom:22px}
+.card{background:linear-gradient(145deg,#111827,#1e293b);padding:22px;border-radius:18px;border:1px solid #334155;margin-bottom:22px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
 .card h3{margin-top:0;color:#f8fafc}
 input,textarea{width:100%;padding:14px;margin:10px 0;background:#0f172a;border:1px solid #334155;border-radius:12px;color:#fff;font-size:14px}
-.btn{background:linear-gradient(90deg,#3b82f6,#8b5cf6);color:#fff;padding:13px;border:none;border-radius:12px;cursor:pointer;width:100%;font-weight:700;transition:0.2s}
-.btn:hover{transform:scale(1.02)}
-.result{background:#0f172a;padding:14px;border-radius:12px;margin-top:12px;white-space:pre-wrap;line-height:1.7;font-size:14px;border:1px solid #1e293b;min-height:40px}
+input::placeholder,textarea::placeholder{color:#64748b}
+.btn{background:linear-gradient(90deg,#3b82f6,#8b5cf6);color:#fff;padding:13px;border:none;border-radius:12px;cursor:pointer;width:100%;font-weight:700;letter-spacing:0.5px;transition:0.2s}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.btn:hover:not(:disabled){transform:scale(1.02);opacity:0.9}
+.result{background:#0f172a;padding:14px;border-radius:12px;margin-top:12px;white-space:pre-wrap;line-height:1.7;font-size:14px;border:1px solid #1e293b;min-height:40px;color:#cbd5e1}
 #chatBox{height:340px;overflow-y:auto;border:1px solid #1e293b;padding:14px;border-radius:12px;background:#0f172a}
-img.gen{width:100%;border-radius:14px;margin-top:12px;border:1px solid #334155;background:#000;min-height:200px}
-.small-btns{display:flex;gap:10px;margin-top:12px}
-.small-btns button{flex:1;padding:11px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#fff;cursor:pointer;font-weight:600}
-.loader{border:3px solid #1e293b;border-top:3px solid #8b5cf6;border-radius:50%;width:24px;height:24px;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px}
-@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+#chatBox p{margin:12px 0;line-height:1.6;font-size:14px}
+#chatBox b{color:#60a5fa}
+footer{text-align:center;padding:24px;background:#020617;color:#64748b;margin-top:30px;border-top:1px solid #1e293b}
+footer a{color:#94a3b8;margin:0 10px;text-decoration:none}footer a:hover{color:#fff}
+img.gen{width:100%;border-radius:14px;margin-top:12px;border:1px solid #334155;max-height:600px;object-fit:contain;background:#000}
+.small-btns{display:flex;gap:10px;margin-top:10px}
+.small-btns button{flex:1;padding:10px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#fff;cursor:pointer;font-weight:600}
 </style>
 </head>
 <body>
@@ -35,108 +40,4 @@ img.gen{width:100%;border-radius:14px;margin-top:12px;border:1px solid #334155;b
 <div class="container">
 <div class="card"><h3>✨ Essay Generator Pro</h3><input id="essayTopic" placeholder="Topic likho - ex: Artificial Intelligence"><button class="btn" onclick="makeEssay()">✨ Generate Magic Essay</button><div id="essayOut" class="result">Your essay will appear here...</div></div>
 
-<div class="card"><h3>💬 Rajat AI Chat - Ask Anything</h3><div id="chatBox"><p><b>Rajat AI:</b> Hey! I'm your premium assistant. Puchho jo bhi puchna hai 🔥</p></div><div style="display:flex;gap:10px;margin-top:12px"><input id="chatInput" placeholder="Type your question..."><button class="btn" style="width:110px" onclick="sendChat()">Send 🚀</button></div></div>
-
-<div class="card"><h3>🎨 AI Image Studio - Celebrity Edition + HD Fix</h3><input id="imgPrompt" placeholder="Describe - ex: A billionaire boy in Lamborghini, cinematic"><button class="btn" onclick="makeImg()">🎨 Generate HD Image</button><div id="imgOut" class="result">Your HD image will appear here... Click Generate</div></div>
-</div>
-
-<footer style="text-align:center;padding:20px;color:#64748b">© 2026 Rajat AI • Built with ❤️ for Students</footer>
-
-<script>
-function clean(t){if(!t) return ""; return t.toString().replace(/\*\*/g,'').replace(/\*/g,'').replace(/##/g,'').trim();}
-
-function correctPrompt(p){
-  let base = p.trim();
-  // Image correction logic - face + HD fix
-  if(base.length < 5) return base;
-  const quality = " ultra realistic, 4k uhd, photorealistic, sharp focus, highly detailed skin, detailed face, symmetrical eyes, natural skin texture, cinematic lighting, DSLR photo, 85mm lens, 8k";
-  const negativeAvoid = " blurry, distorted, deformed, low quality, cartoon, illustration";
-  
-  // already has quality tags?
-  if(base.toLowerCase().includes("4k") || base.toLowerCase().includes("photorealistic")) {
-    return base;
-  }
-  return base + quality + " -- avoid: " + negativeAvoid;
-}
-
-async function makeEssay(){
- let t=document.getElementById('essayTopic').value; if(!t)return alert('Topic likho');
- document.getElementById('essayOut').innerHTML='<span class="loader"></span> Crafting your essay...';
- try{
-   let r=await puter.ai.chat(`Write a premium 400 word essay in Hindi + English mix on: ${t}. Plain text only, no markdown, professional tone.`);
-   document.getElementById('essayOut').innerText=clean(r.message?.content || r);
- }catch(e){ document.getElementById('essayOut').innerText="Error: " + e.message; }
-}
-
-async function sendChat(){
- let inp=document.getElementById('chatInput'); let box=document.getElementById('chatBox'); if(!inp.value.trim())return;
- let q=inp.value; box.innerHTML+=`<p><b>You:</b> ${q}</p>`; inp.value='';
- let id='t'+Date.now(); box.innerHTML+=`<p id="${id}"><b>Rajat AI:</b> <span class="loader"></span> Thinking...</p>`; box.scrollTop=box.scrollHeight;
- try{
-   let r=await puter.ai.chat(q); 
-   document.getElementById(id).remove();
-   box.innerHTML+=`<p><b>Rajat AI:</b> ${clean(r.message?.content || r)}</p>`;
-   box.scrollTop=box.scrollHeight;
- }catch(e){ document.getElementById(id).innerText="Error: " + e.message; }
-}
-
-async function makeImg(){
- let raw=document.getElementById('imgPrompt').value; if(!raw.trim())return alert('Prompt likho');
- let p = correctPrompt(raw);
- let out = document.getElementById('imgOut');
- out.innerHTML=`<span class="loader"></span> Creating HD image...<br><small style="color:#64748b">Corrected Prompt: ${p.substring(0,120)}...</small>`;
-
- try{
-   let img = await puter.ai.txt2img(p, false);
-   // puter kabhi kabhi element deta hai kabhi src
-   let src = img.src || img;
-   if(typeof src !== 'string') src = img.getAttribute('src');
-   showImage(src);
- }catch(e){
-   console.log("Puter fail, using fallback", e);
-   // HD Fix Fallback - flux model best for face
-   let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=1024&height=1280&nologo=true&model=flux&enhance=true&seed=${Date.now()}`;
-   showImage(url, true);
- }
-}
-
-function showImage(src, isFallback=false){
-  document.getElementById('imgOut').innerHTML=`
-    <img class="gen" id="genImg" src="${src}" crossorigin="anonymous" onload="this.style.minHeight='auto'" onerror="handleImgError(this)">
-    <div class="small-btns">
-      <button onclick="downloadImg()">⬇️ Download HD</button>
-      <button onclick="makeImg()">🔄 Regenerate</button>
-    </div>
-    <p style="font-size:11px;color:#64748b;margin-top:8px">${isFallback ? 'Fallback mode (Flux) used - ' : ''}If face is still blurry, add "closeup face shot" to prompt</p>
-  `;
-}
-
-function handleImgError(imgEl){
-  imgEl.parentElement.innerHTML = `<p style="color:#f87171">Image load fail ho gaya. Dubara Generate karo. Net slow ho sakta hai.</p><div class="small-btns"><button onclick="makeImg()">🔄 Retry</button></div>`;
-}
-
-async function downloadImg(){
-  let img = document.getElementById('genImg');
-  if(!img) return alert('Pehle image generate karo');
-  try{
-    // CORS fix ke liye fetch -> blob method
-    let response = await fetch(img.src, {mode: 'cors'});
-    let blob = await response.blob();
-    let url = URL.createObjectURL(blob);
-    let a = document.createElement('a');
-    a.href = url;
-    a.download = 'RajatAI-HD-'+Date.now()+'.jpg';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  }catch(e){
-    // agar blob fail to new tab open
-    window.open(img.src, '_blank');
-  }
-}
-
-document.getElementById('chatInput').addEventListener('keypress', function(e){ if(e.key==='Enter') sendChat(); });
-</script>
-</body>
-</html>
+<div class="card"><h3>💬 Rajat AI Chat - Ask Anything</h3><div
