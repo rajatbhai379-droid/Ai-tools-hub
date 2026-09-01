@@ -2,112 +2,56 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rajat AI - Free AI Tools for Students</title>
-<meta name="description" content="Free AI tools - Essay, Homework, Text to Image for students in Hindi & English">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rajat AI - Lifetime Free AI</title>
+<script src="https://js.puter.com/v2/"></script>
 <style>
-*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#f4f5f7;color:#222}
-header{background:#0f172a;color:#fff;padding:15px;text-align:center;position:sticky;top:0}
-nav a{color:#fff;margin:0 10px;text-decoration:none;font-weight:bold}
-.hero{background:#fff;padding:40px 20px;text-align:center}
-.hero h1{font-size:30px;margin:10px 0}
-.container{max-width:1000px;margin:auto;padding:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:20px}
-.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
-.card h3{margin-top:0}
-input,textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:8px;font-size:15px}
-.btn{background:#0f172a;color:#fff;padding:12px 20px;border:none;border-radius:8px;cursor:pointer;width:100%;font-size:16px;font-weight:bold}
-.btn:hover{background:#1e293b}
-.result{background:#f1f5f9;padding:15px;border-radius:8px;margin-top:15px;white-space:pre-wrap;min-height:50px}
-img.gen{width:100%;border-radius:10px;margin-top:10px}
-footer{text-align:center;padding:25px;background:#0f172a;color:#fff;margin-top:40px}
+*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f4f5f7}
+header{background:#0f172a;color:#fff;padding:15px;text-align:center}
+.container{max-width:900px;margin:auto;padding:20px}
+.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);margin-bottom:20px}
+input,textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:8px}
+.btn{background:#0f172a;color:#fff;padding:12px;border:none;border-radius:8px;cursor:pointer;width:100%;font-weight:bold}
+.result{background:#f1f5f9;padding:12px;border-radius:8px;margin-top:10px;white-space:pre-wrap;min-height:40px}
+#chatBox{height:300px;overflow-y:auto;border:1px solid #ddd;padding:10px;border-radius:8px;background:#fff}
+footer{text-align:center;padding:20px;background:#0f172a;color:#fff}
 footer a{color:#fff;margin:0 8px;text-decoration:none}
-.tab{display:none}.tab.active{display:block}
 </style>
 </head>
 <body>
-
-<header>
-<h2 style="margin:0">Rajat AI</h2>
-<nav><a href="#" onclick="showTab('home')">Home</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
-</header>
-
-<div class="hero" id="home-hero">
-<h1>Free AI Assistant for Every Student</h1>
-<p>Homework, Essay, Image - Sab kuch ek jagah, bina login ke.</p>
-</div>
-
+<header><h2>Rajat AI - Lifetime Free (Puter.js)</h2></header>
 <div class="container">
-<div class="grid">
-<!-- Essay Tool -->
-<div class="card">
-<h3>📝 Essay Generator</h3>
-<input id="essayTopic" placeholder="Topic likho - ex: Diwali, Pollution">
-<button class="btn" onclick="makeEssay()">Generate Essay</button>
-<div id="essayOut" class="result">Yaha essay ayega...</div>
+<div class="card"><h3>📝 Essay Generator - Real AI</h3><input id="essayTopic" placeholder="Topic likho - ex: Diwali"><button class="btn" onclick="makeEssay()">Generate with GPT-4</button><div id="essayOut" class="result">Yaha essay ayega...</div></div>
+<div class="card"><h3>💬 Real AI Chat</h3><div id="chatBox"><p><b>AI:</b> Namaste! Ab mai lifetime free GPT se connected hu, kuch bhi pucho.</p></div><div style="display:flex;gap:10px;margin-top:10px"><input id="chatInput" placeholder="Kuch bhi pucho..."><button class="btn" style="width:90px" onclick="sendChat()">Send</button></div></div>
+<div class="card"><h3>🎨 Text to Image</h3><input id="imgPrompt" placeholder="A cute cat studying"><button class="btn" onclick="makeImg()">Generate Image</button><div id="imgOut" class="result"></div></div>
 </div>
-
-<!-- Homework Tool -->
-<div class="card">
-<h3>📚 Homework Helper</h3>
-<textarea id="hwQ" placeholder="Apna sawal yaha likho..."></textarea>
-<button class="btn" onclick="makeHw()">Get Answer</button>
-<div id="hwOut" class="result">Yaha answer ayega...</div>
-</div>
-
-<!-- Image Tool -->
-<div class="card">
-<h3>🎨 Text to Image</h3>
-<input id="imgPrompt" placeholder="Jaise: A cute cat studying">
-<button class="btn" onclick="makeImg()">Generate Image</button>
-<div id="imgOut" class="result">Image yaha ayegi...</div>
-</div>
-</div>
-
-<!-- Chat Tool -->
-<div class="card" style="margin-top:30px">
-<h3>💬 Rajat AI Chat</h3>
-<div id="chatBox" style="height:200px;overflow-y:auto;border:1px solid #ddd;padding:10px;border-radius:8px;background:#fff">
-<p><b>AI:</b> Namaste! Koi bhi sawal pucho.</p>
-</div>
-<div style="display:flex;gap:10px;margin-top:10px">
-<input id="chatInput" placeholder="Message likho..." style="flex:1">
-<button class="btn" style="width:100px" onclick="sendChat()">Send</button>
-</div>
-</div>
-</div>
-
-<footer>
-<p>© 2026 Rajat AI - All Rights Reserved</p>
-<p><a href="about.html">About Us</a> | <a href="contact.html">Contact Us</a> | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms</a></p>
-</footer>
-
+<footer><p>© 2026 Rajat AI - Lifetime Free</p><p><a href="about.html">About</a> | <a href="privacy.html">Privacy</a> | <a href="contact.html">Contact</a></p></footer>
 <script>
-function makeEssay(){
+async function makeEssay(){
  let t=document.getElementById('essayTopic').value;
- if(!t){alert('Topic likho');return;}
- document.getElementById('essayOut').innerText=`"${t}" par Nibandh\n\nPrastavna:\n${t} hamare jeevan ka ek mahatvapurn vishay hai. Har vidyarthi ko iske baare me janna chahiye.\n\nMukhya Vishay:\n1. ${t} ka arth aur mahatva.\n2. ${t} se hone wale labh.\n3. ${t} hamare samaj par kya prabhav dalta hai.\n\nUpasamhar:\nAnt me, hum keh sakte hain ki ${t} ka hamare jeevan me bahut bada yogdan hai. Hume iska samman karna chahiye.`;
+ if(!t)return alert('Topic likho');
+ document.getElementById('essayOut').innerText='GPT-4 likh raha hai...';
+ let res = await puter.ai.chat(`Write a 400 word essay in Hindi on topic: ${t}, use simple language for students`);
+ document.getElementById('essayOut').innerText=res.message.content;
 }
-function makeHw(){
- let q=document.getElementById('hwQ').value;
- if(!q){alert('Sawal likho');return;}
- document.getElementById('hwOut').innerText=`Tumhara Sawal: ${q}\n\nJawab (Demo):\nIs sawal ka jawab step-by-step hai.\n1. Pehle sawal ko samjho.\n2. Uske main points likho.\n3. Example ke saath explain karo.\n\nAgar tum isko detail me chahte ho to Chat me pucho, mai pura solution dunga.`;
-}
-function makeImg(){
- let p=document.getElementById('imgPrompt').value;
- if(!p){alert('Prompt likho');return;}
- let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=512&height=512&nologo=true`;
- document.getElementById('imgOut').innerHTML=`Generating...<br><img class="gen" src="${url}" onload="this.previousSibling">`;
-}
-function sendChat(){
+async function sendChat(){
  let inp=document.getElementById('chatInput');
  let box=document.getElementById('chatBox');
  if(!inp.value)return;
- box.innerHTML+=`<p><b>You:</b> ${inp.value}</p>`;
- box.innerHTML+=`<p><b>AI:</b> "${inp.value}" ka best jawab ye hai - is topic ko 3 point me samjho, example yaad rakho aur apni language me likho. Agar detail chahiye to Essay ya Homework tool use karo.</p>`;
- inp.value=""; box.scrollTop=box.scrollHeight;
+ let q=inp.value;
+ box.innerHTML+=`<p><b>You:</b> ${q}</p>`;
+ inp.value=''; box.innerHTML+=`<p id="typ"><b>AI:</b> typing...</p>`; box.scrollTop=box.scrollHeight;
+ let res = await puter.ai.chat(q);
+ document.getElementById('typ').remove();
+ box.innerHTML+=`<p><b>AI:</b> ${res.message.content}</p>`;
+ box.scrollTop=box.scrollHeight;
 }
-function showTab(id){window.scrollTo(0,0);}
+function makeImg(){
+ let p=document.getElementById('imgPrompt').value;
+ if(!p)return alert('Prompt likho');
+ let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=512&height=512&seed=${Date.now()}`;
+ document.getElementById('imgOut').innerHTML=`<img src="${url}" style="width:100%;border-radius:10px">`;
+}
 </script>
 </body>
 </html>
