@@ -3,36 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rajat AI - Lifetime Free AI</title>
+<title>Rajat AI - Free AI Assistant for Students</title>
 <script src="https://js.puter.com/v2/"></script>
 <style>
-*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f4f5f7}
-header{background:#0f172a;color:#fff;padding:15px;text-align:center}
+*{box-sizing:border-box}body{font-family:'Segoe UI',Arial;margin:0;background:#f8fafc;color:#1e293b}
+header{background:#ffffff;padding:15px 20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.05);position:sticky;top:0;z-index:10}
+header h2{margin:0;color:#0f172a;letter-spacing:0.5px}
 .container{max-width:900px;margin:auto;padding:20px}
-.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);margin-bottom:20px}
-input,textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:8px}
-.btn{background:#0f172a;color:#fff;padding:12px;border:none;border-radius:8px;cursor:pointer;width:100%;font-weight:bold}
-.result{background:#f1f5f9;padding:12px;border-radius:8px;margin-top:10px;white-space:pre-wrap;min-height:40px}
-#chatBox{height:300px;overflow-y:auto;border:1px solid #ddd;padding:10px;border-radius:8px;background:#fff}
-footer{text-align:center;padding:20px;background:#0f172a;color:#fff}
-footer a{color:#fff;margin:0 8px;text-decoration:none}
+.card{background:#fff;padding:22px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:22px;border:1px solid #e2e8f0}
+.card h3{margin-top:0;color:#0f172a}
+input,textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #cbd5e1;border-radius:10px;font-size:15px}
+input:focus,textarea:focus{outline:none;border-color:#0f172a}
+.btn{background:#0f172a;color:#fff;padding:12px;border:none;border-radius:10px;cursor:pointer;width:100%;font-weight:600;font-size:15px}
+.btn:hover{background:#1e293b}
+.result{background:#f8fafc;padding:14px;border-radius:10px;margin-top:12px;white-space:pre-wrap;line-height:1.7;font-size:14px;border:1px solid #e2e8f0;min-height:40px}
+#chatBox{height:320px;overflow-y:auto;border:1px solid #e2e8f0;padding:12px;border-radius:10px;background:#fff}
+#chatBox p{margin:10px 0;line-height:1.6;word-wrap:break-word;font-size:14px}
+footer{text-align:center;padding:22px;background:#0f172a;color:#cbd5e1;margin-top:30px;font-size:14px}
+footer a{color:#fff;margin:0 10px;text-decoration:none}
 </style>
 </head>
 <body>
-<header><h2>Rajat AI - Lifetime Free (Puter.js)</h2></header>
+<header><h2>Rajat AI</h2><p style="margin:5px 0 0;font-size:13px;color:#64748b">Free AI Tools for Students</p></header>
+
 <div class="container">
-<div class="card"><h3>📝 Essay Generator - Real AI</h3><input id="essayTopic" placeholder="Topic likho - ex: Diwali"><button class="btn" onclick="makeEssay()">Generate with GPT-4</button><div id="essayOut" class="result">Yaha essay ayega...</div></div>
-<div class="card"><h3>💬 Real AI Chat</h3><div id="chatBox"><p><b>AI:</b> Namaste! Ab mai lifetime free GPT se connected hu, kuch bhi pucho.</p></div><div style="display:flex;gap:10px;margin-top:10px"><input id="chatInput" placeholder="Kuch bhi pucho..."><button class="btn" style="width:90px" onclick="sendChat()">Send</button></div></div>
-<div class="card"><h3>🎨 Text to Image</h3><input id="imgPrompt" placeholder="A cute cat studying"><button class="btn" onclick="makeImg()">Generate Image</button><div id="imgOut" class="result"></div></div>
+<div class="card"><h3>📝 Essay Generator</h3><input id="essayTopic" placeholder="Topic likho - jaise Diwali, My Aim"><button class="btn" onclick="makeEssay()">Generate Essay</button><div id="essayOut" class="result">Yaha essay ayega...</div></div>
+
+<div class="card"><h3>💬 Ask Anything</h3><div id="chatBox"><p><b>Rajat AI:</b> Namaste! Apna koi bhi sawal puchiye.</p></div><div style="display:flex;gap:10px;margin-top:12px"><input id="chatInput" placeholder="Yaha apna sawal likho..."><button class="btn" style="width:100px" onclick="sendChat()">Send</button></div></div>
+
+<div class="card"><h3>🎨 Text to Image</h3><input id="imgPrompt" placeholder="Example: A cute cat studying on table"><button class="btn" onclick="makeImg()">Generate Image</button><div id="imgOut" class="result">Yaha image ayegi...</div></div>
 </div>
-<footer><p>© 2026 Rajat AI - Lifetime Free</p><p><a href="about.html">About</a> | <a href="privacy.html">Privacy</a> | <a href="contact.html">Contact</a></p></footer>
+
+<footer><p>© 2026 Rajat AI. All Rights Reserved.</p><p><a href="about.html">About Us</a> | <a href="privacy.html">Privacy Policy</a> | <a href="contact.html">Contact Us</a> | <a href="terms.html">Terms</a></p></footer>
+
 <script>
+function cleanText(text){
+ return text.replace(/\*\*/g, '').replace(/\*/g, '').replace(/##/g, '').replace(/###/g, '');
+}
 async function makeEssay(){
  let t=document.getElementById('essayTopic').value;
  if(!t)return alert('Topic likho');
- document.getElementById('essayOut').innerText='GPT-4 likh raha hai...';
- let res = await puter.ai.chat(`Write a 400 word essay in Hindi on topic: ${t}, use simple language for students`);
- document.getElementById('essayOut').innerText=res.message.content;
+ document.getElementById('essayOut').innerText='Likh raha hu...';
+ let res = await puter.ai.chat(`Write a 400 word essay in easy Hindi on: ${t}. No stars, no bold formatting, simple plain text only.`);
+ document.getElementById('essayOut').innerText=cleanText(res.message.content);
 }
 async function sendChat(){
  let inp=document.getElementById('chatInput');
@@ -40,17 +53,20 @@ async function sendChat(){
  if(!inp.value)return;
  let q=inp.value;
  box.innerHTML+=`<p><b>You:</b> ${q}</p>`;
- inp.value=''; box.innerHTML+=`<p id="typ"><b>AI:</b> typing...</p>`; box.scrollTop=box.scrollHeight;
- let res = await puter.ai.chat(q);
- document.getElementById('typ').remove();
- box.innerHTML+=`<p><b>AI:</b> ${res.message.content}</p>`;
+ inp.value=''; 
+ let typingId = 'typ-'+Date.now();
+ box.innerHTML+=`<p id="${typingId}"><b>Rajat AI:</b> Soch raha hu...</p>`; 
+ box.scrollTop=box.scrollHeight;
+ let res = await puter.ai.chat(q + " - Answer in simple Hindi/English mix, plain text, no markdown stars.");
+ document.getElementById(typingId).remove();
+ box.innerHTML+=`<p><b>Rajat AI:</b> ${cleanText(res.message.content)}</p>`;
  box.scrollTop=box.scrollHeight;
 }
 function makeImg(){
  let p=document.getElementById('imgPrompt').value;
  if(!p)return alert('Prompt likho');
- let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=512&height=512&seed=${Date.now()}`;
- document.getElementById('imgOut').innerHTML=`<img src="${url}" style="width:100%;border-radius:10px">`;
+ let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=768&height=768&nologo=true&seed=${Date.now()}`;
+ document.getElementById('imgOut').innerHTML=`<img src="${url}" style="width:100%;border-radius:12px">`;
 }
 </script>
 </body>
