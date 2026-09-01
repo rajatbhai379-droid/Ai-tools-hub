@@ -3,27 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rajat AI - Free ChatGPT Clone</title>
+<title>Rajat AI - Free ChatGPT</title>
+<script src="https://js.puter.com/v2/"></script>
 <style>
-*{box-sizing:border-box} body{margin:0;font-family:Arial;background:#0f0f0f;color:white;display:flex;flex-direction:column;height:100vh}
-.header{padding:15px;text-align:center;border-bottom:1px solid #333;font-weight:bold;background:#171717}
-#chat{flex:1;overflow-y:auto;padding:20px;background:#212121}
-.msg{padding:14px 16px;border-radius:12px;margin:12px 0;max-width:90%;line-height:1.6;white-space:pre-wrap}
-.user{background:#2f2f2f;margin-left:auto;text-align:right}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui;background:#212121;color:white;display:flex;flex-direction:column;height:100vh}
+.header{padding:15px;text-align:center;background:#171717;font-weight:bold;border-bottom:1px solid #333}
+#chat{flex:1;overflow-y:auto;padding:15px}
+.msg{padding:12px 15px;border-radius:10px;margin:10px 0;max-width:90%;line-height:1.5;word-wrap:break-word}
+.user{background:#2f2f2f;margin-left:auto}
 .bot{background:#444654}
-#box{display:flex;padding:12px;background:#171717;gap:8px;position:sticky;bottom:0}
-input{flex:1;padding:14px;border-radius:25px;border:1px solid #444;outline:none;background:#2f2f2f;color:white}
-button{padding:13px 22px;border-radius:25px;border:none;background:#10a37f;color:white;font-weight:bold;cursor:pointer}
-.loading{opacity:0.7;font-style:italic}
+#box{display:flex;padding:10px;background:#171717;gap:8px}
+input{flex:1;padding:14px;border-radius:25px;border:none;outline:none;background:#40414f;color:white}
+button{padding:12px 20px;border-radius:25px;border:none;background:#10a37f;color:white;font-weight:bold;cursor:pointer}
 </style>
 </head>
 <body>
-<div class="header">🤖 Rajat AI - ChatGPT jaisa AI (No Login)</div>
+<div class="header">🤖 Rajat AI - ChatGPT Clone (Working)</div>
 <div id="chat">
-<div class="msg bot">Hi Rajat! 👋 Pucho jo puchna hai. Ye Google Search + ChatGPT jaisa kaam karega. Koi API Key nahi chahiye.</div>
+<div class="msg bot">Hi Rajat! Bolo kya help chahiye? Nepal news, Google search, kuch bhi pucho.</div>
 </div>
 <div id="box">
-<input id="q" placeholder="Kuch bhi pucho... jaise: Tajmahal kahan hai?" onkeypress="if(event.key==='Enter')ask()">
+<input id="q" placeholder="Yaha likho...">
 <button onclick="ask()">Send</button>
 </div>
 
@@ -32,23 +32,18 @@ async function ask(){
   let input = document.getElementById('q');
   let question = input.value.trim();
   if(!question) return;
-  
   let chat = document.getElementById('chat');
   chat.innerHTML += `<div class="msg user">${question}</div>`;
   input.value = "";
-  let id = Date.now();
-  chat.innerHTML += `<div class="msg bot loading" id="${id}">✍️ Rajat AI likh raha hai...</div>`;
+  let tempId = "t"+Date.now();
+  chat.innerHTML += `<div class="msg bot" id="${tempId}">Typing...</div>`;
   chat.scrollTop = chat.scrollHeight;
 
-  try {
-    // Ye Free AI hai, bina API key ke chalega
-    let res = await fetch('https://text.pollinations.ai/' + encodeURIComponent(question + " - answer in Hindi and English mix like ChatGPT"));
-    let answer = await res.text();
-    
-    document.getElementById(id).remove();
-    chat.innerHTML += `<div class="msg bot">${answer}</div>`;
-  } catch(e) {
-    document.getElementById(id).innerText = "Error: Thoda ruk ke dobara pucho. Server busy hai.";
+  try{
+    let response = await puter.ai.chat(question);
+    document.getElementById(tempId).innerText = response;
+  } catch(e){
+    document.getElementById(tempId).innerText = "Error: "+e.message+" - Dobara try karo";
   }
   chat.scrollTop = chat.scrollHeight;
 }
